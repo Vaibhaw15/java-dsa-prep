@@ -103,12 +103,14 @@ async function cjRun(source) {
     // Added on the first line so compiler line numbers stay the same.
     const pkg = 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
     const add = window.cheerpOSAddStringFile || window.cheerpjAddStringFile;
-    add(`/str/${pkg}/Main.java`, new TextEncoder().encode(`package ${pkg}; ` + source));
+    // CheerpJ's /str/ mount is flat (no subfolders), so the source always goes to /str/Main.java.
+    // The file must be named Main.java because it declares `public class Main`.
+    add('/str/Main.java', new TextEncoder().encode(`package ${pkg}; ` + source));
 
     con.textContent = '';
     const t0 = performance.now();
     const code = await window.cheerpjRunMain('com.sun.tools.javac.Main', '/app/tools.jar',
-      `/str/${pkg}/Main.java`, '-d', '/files/', '-encoding', 'UTF-8', '-nowarn');
+      '/str/Main.java', '-d', '/files/', '-encoding', 'UTF-8', '-nowarn');
     await sleep(50);
     if (code !== 0) return { ok: false, compileError: con.textContent || 'Compilation failed' };
 
