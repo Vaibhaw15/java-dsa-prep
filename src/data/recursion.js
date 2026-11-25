@@ -486,7 +486,7 @@ class Solution {
     public List<String> letterCombinations(String digits) {
         if (digits.isEmpty()) return new ArrayList<>();
         String[] map = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-        List<String> res = new ArrayList<>(List.of(""));
+        List<String> res = new ArrayList<>(Arrays.asList(""));
         for (char d : digits.toCharArray()) {
             List<String> next = new ArrayList<>();
             for (String prefix : res) {

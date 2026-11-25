@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { allProblems, topics } from '../data/index.js';
 
 const KEY = 'java-dsa-prep:v1';
+const onOwnComputer = () => /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
 
 export const todayKey = (d = new Date()) => {
   const y = d.getFullYear(), m = String(d.getMonth() + 1).padStart(2, '0'), day = String(d.getDate()).padStart(2, '0');
@@ -21,7 +22,7 @@ const defaults = () => ({
     theme: 'dark',
     fontSize: 14,
     dailyGoal: 3,
-    runner: { mode: 'local', localUrl: '', judge0Url: 'https://ce.judge0.com', judge0Key: '', judge0Lang: 62, pistonUrl: 'http://localhost:2000/api/v2/execute' },
+    runner: { mode: onOwnComputer() ? 'local' : 'browser', localUrl: '', judge0Url: 'https://ce.judge0.com', judge0Key: '', judge0Lang: 62, pistonUrl: 'http://localhost:2000/api/v2/execute' },
   },
 });
 
@@ -31,6 +32,9 @@ function load() {
     if (!raw) return defaults();
     const saved = JSON.parse(raw);
     const d = defaults();
+    // A hosted copy (e.g. Vercel) has no local runner: move old default settings to the in-browser runner.
+    const sr = saved.settings?.runner;
+    if (sr && sr.mode === 'local' && !sr.localUrl && !onOwnComputer()) sr.mode = 'browser';
     return { ...d, ...saved, settings: { ...d.settings, ...saved.settings, runner: { ...d.settings.runner, ...(saved.settings?.runner || {}) } } };
   } catch {
     return defaults();

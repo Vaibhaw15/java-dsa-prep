@@ -247,7 +247,7 @@ export default function Workspace() {
                   <p className="muted small">+ {p.tests.length - samples.length} hidden test{p.tests.length - samples.length === 1 ? '' : 's'} on Submit (edge cases included).</p>
                 </div>
               )}
-              {consoleTab === 'result' && <ResultView p={p} result={result} running={running} activeCase={activeCase} setActiveCase={setActiveCase} />}
+              {consoleTab === 'result' && <ResultView p={p} result={result} running={running} activeCase={activeCase} setActiveCase={setActiveCase} browser={settings.runner.mode === 'browser'} />}
             </div>
           </div>
         </section>
@@ -265,8 +265,14 @@ export default function Workspace() {
   );
 }
 
-function ResultView({ p, result, running, activeCase, setActiveCase }) {
-  if (running) return <div className="result-wait"><span className="spin" /> {running === 'submit' ? 'Running all tests…' : 'Running sample tests…'}</div>;
+function ResultView({ p, result, running, activeCase, setActiveCase, browser }) {
+  if (running) return (
+    <div className="result-wait"><span className="spin" />
+      <span>{running === 'submit' ? 'Running all tests…' : 'Running sample tests…'}
+        {browser && <><br /><span className="muted small">Java runs inside your browser. The first run downloads the runtime and can take 20–60 s; later runs are faster.</span></>}
+      </span>
+    </div>
+  );
   if (!result) return <p className="muted">Run your code to see results here.</p>;
   if (result.error) {
     if (result.unreachable) {
@@ -286,6 +292,7 @@ function ResultView({ p, result, running, activeCase, setActiveCase }) {
       <div className="result-error">
         <h4 className="tone-text-bad">{result.compile ? 'Compilation error' : 'Error'}</h4>
         <pre className="err">{result.error}</pre>
+        {browser && result.compile && <p className="muted small">The in-browser runner compiles at Java 8 level: use <code>new ArrayList&lt;&gt;(Arrays.asList(...))</code> instead of <code>List.of</code>, and no <code>var</code>, <code>String.repeat</code> or switch arrows.</p>}
       </div>
     );
   }

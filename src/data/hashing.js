@@ -172,7 +172,7 @@ class Solution {
             for (List<String> g : groups) {
                 if (isAnagram(g.get(0), s)) { g.add(s); placed = true; break; }
             }
-            if (!placed) groups.add(new ArrayList<>(List.of(s)));
+            if (!placed) groups.add(new ArrayList<>(Arrays.asList(s)));
         }
         return groups;
     }

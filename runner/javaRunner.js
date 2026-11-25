@@ -36,7 +36,8 @@ export async function runJava(source, { timeoutMs = 10000 } = {}) {
   const dir = await mkdtemp(join(tmpdir(), 'jdsa-'));
   try {
     await writeFile(join(dir, 'Main.java'), source, 'utf8');
-    const c = await exec('javac', ['-encoding', 'UTF-8', '-nowarn', 'Main.java'], { cwd: dir, timeout: 30000 });
+    const rel = process.env.JAVAC_RELEASE ? ['--release', process.env.JAVAC_RELEASE] : [];
+    const c = await exec('javac', [...rel, '-encoding', 'UTF-8', '-nowarn', 'Main.java'], { cwd: dir, timeout: 30000 });
     if (c.spawnError) return { ok: false, error: 'javac not found. Install a JDK (11+) and make sure javac is on your PATH.' };
     if (c.code !== 0) return { ok: false, compileError: c.stderr || c.stdout || 'Compilation failed' };
     const r = await exec('java', ['-Xss256m', '-Xmx512m', '-cp', dir, 'Main'], { cwd: dir, timeout: timeoutMs });

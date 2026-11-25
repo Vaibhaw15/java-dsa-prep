@@ -80,7 +80,8 @@ export default function Settings() {
         <p className="muted small">Run and Submit compile your Java with a real JDK. Choose where that happens.</p>
         <div className="runner-opts">
           {[
-            ['local', 'Local JDK (recommended)', 'Uses the bundled Node runner and the JDK installed on your computer. Works with `npm run dev` or `npm start`.'],
+            ['browser', 'In the browser (free)', 'Runs a real JDK inside this browser tab via CheerpJ, so it works on hosted copies like Vercel. First run downloads the runtime; Java 8 language level.'],
+            ['local', 'Local JDK', 'Uses the bundled Node runner and the JDK installed on your computer. Works with `npm run dev` or `npm start`.'],
             ['judge0', 'Judge0', 'A Judge0 CE instance — self-hosted, the public demo server, or RapidAPI with your key.'],
             ['piston', 'Piston', 'A self-hosted Piston execution engine.'],
           ].map(([k, title, d]) => (

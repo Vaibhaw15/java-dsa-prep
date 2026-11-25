@@ -68,6 +68,7 @@ Solutions stay hidden until you choose to reveal them (with a nudge if you haven
 
 ### Code runner options (Settings → Code runner)
 
+0. **In the browser (free, default on hosted copies such as Vercel)** — a full OpenJDK compiled to WebAssembly ([CheerpJ](https://cheerpj.com), free for personal use) runs inside the tab. `javac` comes from `public/tools.jar`. Compiles at Java 8 language level (no `var`, `List.of`, `String.repeat`). The first run downloads the runtime.
 1. **Local JDK** (default) — the bundled Node runner (`runner/javaRunner.js`) compiles with `javac` and runs with `java` in a temp folder with a 10-second limit. Nothing leaves your machine.
 2. **Judge0** — any Judge0 CE instance (self-hosted, or RapidAPI with your key).
 3. **Piston** — a self-hosted Piston instance.
@@ -119,4 +120,3 @@ Add an object to one of the files in `src/data/`. Minimal shape:
 ```
 
 Supported parameter types: `int long double boolean char String`, their arrays, `int[][] char[][] String[]`, `List<Integer> List<String> List<List<Integer>> List<List<String>>`, `ListNode ListNode[] TreeNode`, plus `CycleList` / `TreeRef` helpers. Options: `out` (index of an in-place parameter for void methods), `cmp: 'sorted' | 'deep'` (order-insensitive), `call` (custom expression), `design` (class with operation sequences) and `starter` (custom starter code). Run `npm run verify -- my-problem` to check it.
-# java-dsa-prep
